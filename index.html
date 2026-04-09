@@ -1,0 +1,1637 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WB — Справочник тем обращений</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════
+   TOKENS — light theme (default)
+═══════════════════════════════════════════════════════════ */
+:root {
+  --sidebar-w: 284px;
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* sidebar (always dark — same both themes) */
+  --sidebar-bg:     #1E0045;
+  --sidebar-mesh1:  rgba(203,17,171,0.28);
+  --sidebar-mesh2:  rgba(91,31,160,0.45);
+
+  /* brand */
+  --wb-deep:    #2D0060;
+  --wb-violet:  #7B35C8;
+  --wb-magenta: #CB11AB;
+  --wb-pink:    #E040C8;
+}
+
+/* ── LIGHT ── */
+[data-theme="light"] {
+  --bg-page:    #FBF0FF;
+  --bg-grad:    linear-gradient(135deg, #F3E6FF 0%, #FFF0FA 50%, #EDE0FF 100%);
+  --topbar-bg:  rgba(255,255,255,0.82);
+  --topbar-border: rgba(200,160,240,0.3);
+  --card-bg:    #FFFFFF;
+  --card-border: rgba(180,130,230,0.25);
+  --card-hover-border: rgba(123,53,200,0.4);
+  --card-shadow: rgba(91,31,160,0.08);
+  --card-hover-shadow: rgba(91,31,160,0.16);
+  --text-main:  #1A0533;
+  --text-mid:   #5A3878;
+  --text-muted: #9B7EC0;
+  --text-hint:  rgba(90,56,120,0.55);
+  --accent-bar: linear-gradient(90deg, var(--wb-violet), var(--wb-magenta));
+  --tag-color:  var(--wb-magenta);
+  --badge-bg:   rgba(203,17,171,0.1);
+  --badge-color: var(--wb-magenta);
+  --stat-border: rgba(180,130,230,0.25);
+  --stat-shadow: rgba(91,31,160,0.06);
+  --divider:    rgba(200,160,240,0.3);
+  --expand-bg:  linear-gradient(180deg, rgba(248,242,255,0.7) 0%, rgba(255,255,255,0) 100%);
+  --hint-dot:   var(--wb-magenta);
+  --home-hero-text: #1A0533;
+  --scrollbar:  rgba(180,130,230,0.3);
+  --topbar-count-bg: rgba(237,224,255,0.7);
+  --topbar-count-border: rgba(180,130,230,0.3);
+  --breadcrumb-link: var(--wb-violet);
+  --nav-active-bg: rgba(255,255,255,0.06);
+  --content-scrollbar: rgba(180,130,230,0.25);
+  --hero-gradient: linear-gradient(135deg, #2D0060 0%, #6B22B0 55%, rgba(203,17,171,0.85) 100%);
+  --pill-bg: rgba(203,17,171,0.09);
+  --pill-color: var(--wb-magenta);
+  --info-card-bg: rgba(255,255,255,0.7);
+  --info-card-border: rgba(180,130,230,0.3);
+}
+
+/* ── DARK ── */
+[data-theme="dark"] {
+  --bg-page:    #120028;
+  --bg-grad:    linear-gradient(135deg, #1A003A 0%, #22004A 50%, #180035 100%);
+  --topbar-bg:  rgba(25,0,55,0.9);
+  --topbar-border: rgba(120,60,200,0.25);
+  --card-bg:    rgba(40,5,80,0.7);
+  --card-border: rgba(100,50,180,0.3);
+  --card-hover-border: rgba(180,80,255,0.5);
+  --card-shadow: rgba(0,0,0,0.3);
+  --card-hover-shadow: rgba(150,50,255,0.2);
+  --text-main:  #F0E6FF;
+  --text-mid:   #C8A8E8;
+  --text-muted: #8A68B0;
+  --text-hint:  rgba(180,140,220,0.55);
+  --accent-bar: linear-gradient(90deg, #9B55E8, var(--wb-magenta));
+  --tag-color:  #E060D0;
+  --badge-bg:   rgba(224,64,200,0.18);
+  --badge-color: #E888D8;
+  --stat-border: rgba(120,60,200,0.3);
+  --stat-shadow: rgba(0,0,0,0.3);
+  --divider:    rgba(100,50,180,0.3);
+  --expand-bg:  linear-gradient(180deg, rgba(50,5,90,0.6) 0%, transparent 100%);
+  --hint-dot:   #E060D0;
+  --home-hero-text: #F0E6FF;
+  --scrollbar:  rgba(120,60,200,0.4);
+  --topbar-count-bg: rgba(60,10,110,0.6);
+  --topbar-count-border: rgba(120,60,200,0.3);
+  --breadcrumb-link: #B880FF;
+  --nav-active-bg: rgba(255,255,255,0.05);
+  --content-scrollbar: rgba(120,60,200,0.3);
+  --hero-gradient: linear-gradient(135deg, #0D0020 0%, #3B0080 55%, rgba(150,20,130,0.9) 100%);
+  --pill-bg: rgba(224,64,200,0.15);
+  --pill-color: #E888D8;
+  --info-card-bg: rgba(40,5,80,0.5);
+  --info-card-border: rgba(100,50,180,0.3);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PASSWORD OVERLAY
+═══════════════════════════════════════════════════════════ */
+#pw-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  background:
+    radial-gradient(ellipse 90% 70% at 15% 20%, #E8C8FF 0%, transparent 55%),
+    radial-gradient(ellipse 80% 60% at 85% 10%, #FFD0F5 0%, transparent 50%),
+    radial-gradient(ellipse 100% 100% at 50% 50%, #F5EAFF 0%, #FBF0FF 100%);
+}
+
+#pw-box {
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(180,130,230,0.3);
+  border-radius: 20px;
+  padding: 40px 36px;
+  width: 340px;
+  box-shadow: 0 20px 60px rgba(91,31,160,0.18);
+  display: flex; flex-direction: column; align-items: center; gap: 20px;
+  font-family: 'Manrope', sans-serif;
+}
+
+#pw-logo {
+  font-size: 22px; font-weight: 800;
+  color: #2D0060; letter-spacing: -0.5px;
+}
+
+#pw-logo span { color: #CB11AB; }
+
+#pw-title {
+  font-size: 13px; font-weight: 500;
+  color: #5A3878; text-align: center; line-height: 1.5;
+}
+
+#pw-input {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1.5px solid rgba(180,130,230,0.4);
+  background: rgba(255,255,255,0.8);
+  font-family: 'Manrope', sans-serif;
+  font-size: 15px; color: #1A0533;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#pw-input:focus {
+  border-color: #7B35C8;
+  box-shadow: 0 0 0 3px rgba(123,53,200,0.12);
+}
+
+#pw-input.shake {
+  animation: shake 0.35s ease;
+  border-color: #CB11AB;
+}
+
+@keyframes shake {
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-8px)}
+  40%{transform:translateX(8px)}
+  60%{transform:translateX(-5px)}
+  80%{transform:translateX(5px)}
+}
+
+#pw-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(90deg, #7B35C8, #CB11AB);
+  color: #fff; font-family: 'Manrope', sans-serif;
+  font-size: 14px; font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+
+#pw-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+#pw-btn:active { transform: translateY(0); }
+
+#pw-error {
+  font-size: 12px; color: #CB11AB;
+  display: none; text-align: center;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BASE
+═══════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Manrope', sans-serif;
+  color: var(--text-main);
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  transition: color 0.3s;
+  position: relative;
+}
+
+/* animated gradient canvas behind everything */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  animation: bgShift 12s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+[data-theme="light"] body::before {
+  background:
+    radial-gradient(ellipse 90% 70% at 15% 20%, #E8C8FF 0%, transparent 55%),
+    radial-gradient(ellipse 80% 60% at 85% 10%, #FFD0F5 0%, transparent 50%),
+    radial-gradient(ellipse 70% 80% at 70% 85%, #D8B4FF 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 5%  80%, #FFC8F0 0%, transparent 50%),
+    radial-gradient(ellipse 100% 100% at 50% 50%, #F5EAFF 0%, #FBF0FF 100%);
+}
+
+[data-theme="dark"] body::before {
+  background:
+    radial-gradient(ellipse 90% 70% at 15% 20%, rgba(80,10,160,0.55) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 60% at 85% 10%, rgba(160,20,140,0.4) 0%, transparent 50%),
+    radial-gradient(ellipse 70% 80% at 70% 85%, rgba(50,0,110,0.6) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 5%  80%, rgba(130,15,120,0.35) 0%, transparent 50%),
+    radial-gradient(ellipse 100% 100% at 50% 50%, #180035 0%, #120028 100%);
+}
+
+@keyframes bgShift {
+  0%   { filter: hue-rotate(0deg)   saturate(1.0) brightness(1.0); transform: scale(1)    rotate(0deg); }
+  25%  { filter: hue-rotate(12deg)  saturate(1.15) brightness(1.04); transform: scale(1.04) rotate(0.4deg); }
+  50%  { filter: hue-rotate(-8deg)  saturate(1.1) brightness(0.97); transform: scale(1.02) rotate(-0.3deg); }
+  75%  { filter: hue-rotate(18deg)  saturate(1.2) brightness(1.05); transform: scale(1.05) rotate(0.5deg); }
+  100% { filter: hue-rotate(-5deg)  saturate(1.05) brightness(1.02); transform: scale(1.03) rotate(-0.2deg); }
+}
+
+/* second layer — floating orbs that drift slowly */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  animation: orbDrift 18s ease-in-out infinite alternate;
+}
+
+[data-theme="light"] body::after {
+  background:
+    radial-gradient(circle 320px at 25% 60%, rgba(203,17,171,0.12) 0%, transparent 70%),
+    radial-gradient(circle 260px at 75% 35%, rgba(123,53,200,0.1) 0%, transparent 70%),
+    radial-gradient(circle 200px at 55% 78%, rgba(224,64,200,0.09) 0%, transparent 70%);
+}
+
+[data-theme="dark"] body::after {
+  background:
+    radial-gradient(circle 320px at 25% 60%, rgba(203,17,171,0.18) 0%, transparent 70%),
+    radial-gradient(circle 260px at 75% 35%, rgba(123,53,200,0.16) 0%, transparent 70%),
+    radial-gradient(circle 200px at 55% 78%, rgba(180,40,180,0.14) 0%, transparent 70%);
+}
+
+@keyframes orbDrift {
+  0%   { background-position: 0% 0%,   100% 0%,   50% 100%; opacity: 0.8; }
+  33%  { background-position: 10% 20%,  80% 15%,  60% 80%;  opacity: 1; }
+  66%  { background-position: -5% 10%,  90% 30%,  40% 90%;  opacity: 0.85; }
+  100% { background-position: 5%  -5%,  75% 5%,   55% 70%;  opacity: 1; }
+}
+
+/* ensure all layout children sit above the bg layers */
+.sidebar, .main {
+  position: relative;
+  z-index: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════════════════════════ */
+.sidebar {
+  width: var(--sidebar-w);
+  min-width: var(--sidebar-w);
+  background: var(--sidebar-bg);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: relative;
+  z-index: 20;
+  box-shadow: 4px 0 40px rgba(20,0,60,0.45);
+  overflow: hidden;
+}
+
+.sidebar::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 170% 130% at 115% -5%, var(--sidebar-mesh1) 0%, transparent 50%),
+    radial-gradient(ellipse 110% 90% at -15% 115%, var(--sidebar-mesh2) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* header */
+.sidebar-header {
+  padding: 22px 20px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  flex-shrink: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  cursor: pointer;
+}
+
+.logo-mark {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--wb-pink);
+  letter-spacing: -0.5px;
+}
+
+.logo-sep { width: 1px; height: 16px; background: rgba(255,255,255,0.18); }
+
+.logo-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.sidebar-title {
+  font-size: 11.5px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.4;
+}
+
+/* theme toggle */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 3px;
+  gap: 2px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.theme-btn {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: none; background: transparent;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  position: relative;
+}
+
+.theme-btn:hover { transform: scale(1.1); }
+
+.theme-btn.active {
+  background: rgba(255,255,255,0.15);
+}
+
+.theme-btn svg { width: 14px; height: 14px; }
+
+/* search */
+.search-wrap {
+  padding: 10px 14px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 8px 12px 8px 34px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  color: #fff;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+.search-input::placeholder { color: rgba(255,255,255,0.28); }
+.search-input:focus { border-color: rgba(203,17,171,0.5); background: rgba(255,255,255,0.1); }
+
+.search-icon {
+  position: absolute; left: 25px; top: 50%; transform: translateY(-50%);
+  width: 13px; height: 13px; opacity: 0.35; pointer-events: none;
+}
+
+/* nav */
+.nav {
+  flex: 1; overflow-y: auto;
+  padding: 4px 0 24px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(203,17,171,0.3) transparent;
+}
+.nav::-webkit-scrollbar { width: 3px; }
+.nav::-webkit-scrollbar-thumb { background: rgba(203,17,171,0.3); border-radius: 2px; }
+
+.nav-item { position: relative; }
+
+.nav-cat {
+  display: flex; align-items: center;
+  padding: 9px 16px 9px 20px;
+  font-size: 12px; font-weight: 600;
+  color: rgba(255,255,255,0.6);
+  cursor: pointer; gap: 7px;
+  transition: color 0.15s, background 0.15s;
+  user-select: none;
+}
+.nav-cat:hover { color: #fff; background: rgba(255,255,255,0.04); }
+.nav-cat-text { flex: 1; line-height: 1.3; }
+
+.nav-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px; font-weight: 500;
+  color: rgba(255,255,255,0.28);
+  background: rgba(255,255,255,0.05);
+  border-radius: 4px; padding: 1px 5px;
+  flex-shrink: 0;
+}
+
+.nav-arrow {
+  width: 13px; height: 13px; flex-shrink: 0;
+  transition: transform 0.25s var(--ease-expo);
+  opacity: 0.35;
+}
+
+.nav-item.open  .nav-arrow  { transform: rotate(90deg); opacity: 0.6; }
+.nav-item.active > .nav-cat { color: #fff; }
+.nav-item.active > .nav-cat .nav-badge {
+  color: var(--wb-pink); background: rgba(203,17,171,0.18);
+}
+.nav-item.active > .nav-cat::before {
+  content: '';
+  position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+  width: 3px; height: 65%;
+  background: var(--wb-magenta); border-radius: 0 2px 2px 0;
+}
+
+.nav-topics {
+  overflow: hidden; max-height: 0;
+  transition: max-height 0.38s var(--ease-expo);
+}
+.nav-item.open .nav-topics { max-height: 1400px; }
+
+.nav-topic {
+  display: block;
+  padding: 6px 16px 6px 34px;
+  font-size: 11px; font-weight: 400;
+  color: rgba(255,255,255,0.38);
+  cursor: pointer; line-height: 1.35;
+  border-left: 2px solid transparent;
+  transition: color 0.12s, background 0.12s;
+}
+.nav-topic:hover { color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.04); }
+.nav-topic.active { color: var(--wb-pink); border-left-color: rgba(203,17,171,0.45); background: rgba(203,17,171,0.06); }
+
+/* ═══════════════════════════════════════════════════════════
+   MAIN
+═══════════════════════════════════════════════════════════ */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+.topbar {
+  height: 56px;
+  background: var(--topbar-bg);
+  border-bottom: 1px solid var(--topbar-border);
+  display: flex; align-items: center;
+  padding: 0 32px; gap: 10px;
+  flex-shrink: 0;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: background 0.3s, border-color 0.3s;
+}
+
+.topbar-breadcrumb {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 12.5px; color: var(--text-muted);
+}
+.topbar-breadcrumb .sep { font-size: 10px; opacity: 0.4; }
+.topbar-breadcrumb .current { color: var(--text-main); font-weight: 600; }
+.topbar-breadcrumb .link {
+  color: var(--breadcrumb-link); cursor: pointer; transition: opacity 0.15s;
+}
+.topbar-breadcrumb .link:hover { opacity: 0.7; }
+
+.topbar-count {
+  margin-left: auto;
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  color: var(--text-muted);
+  background: var(--topbar-count-bg);
+  border: 1px solid var(--topbar-count-border);
+  border-radius: 6px; padding: 3px 10px;
+  transition: background 0.3s;
+}
+
+.content {
+  flex: 1; overflow-y: auto;
+  padding: 32px 32px 60px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--content-scrollbar) transparent;
+  position: relative;
+}
+.content::-webkit-scrollbar { width: 5px; }
+.content::-webkit-scrollbar-thumb { background: var(--content-scrollbar); border-radius: 3px; }
+
+/* ═══════════════════════════════════════════════════════════
+   HOME / WELCOME SCREEN
+═══════════════════════════════════════════════════════════ */
+.home-screen {
+  max-width: 760px;
+  animation: fadeUp 0.55s var(--ease-expo) both;
+}
+
+.home-hero {
+  background: var(--hero-gradient);
+  border-radius: 20px;
+  padding: 44px 48px;
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+}
+.home-hero::before {
+  content: '';
+  position: absolute; top: -70px; right: -70px;
+  width: 220px; height: 220px; border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+}
+.home-hero::after {
+  content: '';
+  position: absolute; bottom: -50px; left: 35%;
+  width: 180px; height: 180px; border-radius: 50%;
+  background: rgba(203,17,171,0.14);
+}
+
+.home-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 1.8px;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px;
+  position: relative; z-index: 1;
+}
+.home-tag::before {
+  content: ''; display: block;
+  width: 24px; height: 1.5px;
+  background: rgba(255,255,255,0.4); border-radius: 1px;
+}
+
+.home-h1 {
+  font-size: 42px; font-weight: 800;
+  line-height: 1.08; letter-spacing: -1.5px;
+  color: #fff;
+  margin-bottom: 14px;
+  position: relative; z-index: 1;
+}
+.home-h1 span {
+  background: linear-gradient(120deg, #F090E0, var(--wb-pink));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.home-sub {
+  font-size: 14.5px; font-weight: 400; line-height: 1.65;
+  color: rgba(255,255,255,0.65);
+  max-width: 520px;
+  position: relative; z-index: 1;
+}
+
+.home-stats {
+  display: flex; gap: 14px;
+  margin-top: 28px;
+  position: relative; z-index: 1;
+}
+.stat-pill {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 10px;
+  padding: 12px 20px;
+  display: flex; align-items: baseline; gap: 8px;
+}
+.stat-pill-num {
+  font-size: 26px; font-weight: 800; color: #fff;
+  line-height: 1;
+}
+.stat-pill-label {
+  font-size: 12px; font-weight: 500;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+/* info cards below hero */
+.home-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.info-card {
+  background: var(--info-card-bg);
+  border: 1px solid var(--info-card-border);
+  border-radius: 16px;
+  padding: 22px 24px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background 0.3s, border-color 0.3s;
+  animation: fadeUp 0.55s var(--ease-expo) both;
+}
+.info-card:nth-child(1) { animation-delay: 0.05s; }
+.info-card:nth-child(2) { animation-delay: 0.1s; }
+.info-card:nth-child(3) { animation-delay: 0.15s; grid-column: 1/-1; }
+
+.info-card-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--tag-color);
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.info-card-label::before {
+  content: ''; display: block;
+  width: 18px; height: 1.5px;
+  background: var(--tag-color); border-radius: 1px;
+}
+
+.info-card-text {
+  font-size: 13.5px; font-weight: 400; line-height: 1.7;
+  color: var(--text-mid);
+}
+
+.info-card-text strong { color: var(--text-main); font-weight: 600; }
+
+.home-hint {
+  font-size: 12.5px; color: var(--text-hint);
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 2px;
+  animation: fadeUp 0.55s var(--ease-expo) 0.2s both;
+}
+/* flow block */
+.flow-block {
+  margin-top: 24px;
+  background: var(--info-card-bg);
+  border: 1px solid var(--info-card-border);
+  border-radius: 18px;
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: fadeUp 0.55s var(--ease-expo) 0.18s both;
+}
+
+.flow-header {
+  display: flex; align-items: center; gap: 14px;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--info-card-border);
+}
+
+.flow-header-title {
+  font-size: 14px; font-weight: 700;
+  color: var(--text-main); letter-spacing: -0.2px;
+}
+
+.flow-header-sub {
+  font-size: 11.5px; color: var(--text-muted); margin-top: 2px;
+}
+
+.flow-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--tag-color);
+  background: var(--badge-bg);
+  border-radius: 5px; padding: 3px 8px;
+  flex-shrink: 0;
+}
+
+.flow-trigger {
+  padding: 16px 24px 14px;
+  border-bottom: 1px solid var(--info-card-border);
+}
+
+.flow-trigger-text {
+  font-size: 13px; color: var(--text-mid); line-height: 1.65;
+}
+
+.flow-trigger-text strong { color: var(--text-main); font-weight: 600; }
+
+.flow-cases {
+  padding: 16px 24px 22px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+
+.flow-case {
+  display: grid;
+  grid-template-columns: 3px 1fr;
+  gap: 14px;
+}
+
+.flow-case-bar {
+  width: 3px; border-radius: 2px; align-self: stretch;
+  min-height: 100%;
+}
+
+.flow-case-bar.red    { background: #E05555; }
+.flow-case-bar.amber  { background: #E0A020; }
+.flow-case-bar.green  { background: #29A86C; }
+
+.flow-case-inner {}
+
+.flow-case-cond {
+  font-size: 12px; font-weight: 600;
+  color: var(--text-main); margin-bottom: 5px; line-height: 1.4;
+}
+
+.flow-case-action {
+  font-size: 12.5px; color: var(--text-mid); line-height: 1.6;
+}
+
+.flow-comment {
+  display: inline-flex; align-items: flex-start; gap: 8px;
+  background: var(--pill-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 7px 12px;
+  margin-top: 7px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; font-weight: 400;
+  color: var(--pill-color);
+  line-height: 1.5;
+}
+
+.flow-comment-icon { flex-shrink: 0; margin-top: 1px; opacity: 0.7; }
+
+.home-hint::before {
+  content: ''; display: block;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--hint-dot);
+  animation: pulse 2.2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CATEGORY VIEW
+═══════════════════════════════════════════════════════════ */
+.cat-header {
+  margin-bottom: 28px;
+  animation: fadeUp 0.45s var(--ease-expo) both;
+}
+.cat-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--tag-color); margin-bottom: 8px;
+}
+.cat-title {
+  font-size: 26px; font-weight: 800; letter-spacing: -0.8px;
+  line-height: 1.15; color: var(--text-main); margin-bottom: 6px;
+  transition: color 0.3s;
+}
+.cat-meta { font-size: 12.5px; color: var(--text-muted); }
+
+.topics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 14px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TOPIC CARD
+═══════════════════════════════════════════════════════════ */
+.topic-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.22s var(--ease-expo), box-shadow 0.22s, border-color 0.22s, background 0.3s;
+  animation: fadeUp 0.45s var(--ease-expo) both;
+  position: relative;
+}
+.topic-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 44px var(--card-hover-shadow);
+  border-color: var(--card-hover-border);
+}
+.topic-card:hover .card-accent { width: 100%; }
+
+.card-accent {
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--accent-bar);
+  width: 36px;
+  border-radius: 0 0 2px 0;
+  transition: width 0.32s var(--ease-expo);
+}
+
+.card-body { padding: 20px 20px 16px; }
+
+.card-index {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px; font-weight: 500;
+  color: var(--text-muted); margin-bottom: 9px;
+  display: flex; align-items: center; gap: 8px;
+}
+.card-index::after {
+  content: ''; flex: 1; height: 1px; background: var(--divider);
+}
+
+.card-title {
+  font-size: 14px; font-weight: 700;
+  color: var(--text-main); line-height: 1.35;
+  margin-bottom: 10px; letter-spacing: -0.2px;
+  transition: color 0.3s;
+}
+
+.card-desc {
+  font-size: 12px; font-weight: 400;
+  color: var(--text-mid); line-height: 1.6;
+  transition: color 0.3s;
+}
+.card-desc.empty { color: var(--text-muted); font-style: italic; opacity: 0.6; }
+
+/* "tap to expand" hint */
+.card-tap-hint {
+  display: inline-flex; align-items: center; gap: 5px;
+  margin-top: 10px;
+  font-size: 11px; font-weight: 500;
+  color: var(--wb-magenta); opacity: 0.7;
+  transition: opacity 0.2s;
+}
+.topic-card:hover .card-tap-hint { opacity: 1; }
+.topic-card.expanded .card-tap-hint { opacity: 0; height: 0; margin: 0; overflow: hidden; }
+
+.card-tap-hint svg {
+  width: 12px; height: 12px;
+  transition: transform 0.25s;
+}
+.topic-card:hover .card-tap-hint svg { transform: translateY(1px); }
+
+/* expanded */
+.topic-card.expanded {
+  border-color: var(--card-hover-border);
+  box-shadow: 0 8px 48px var(--card-hover-shadow);
+}
+.topic-card.expanded .card-accent { width: 100%; }
+
+.card-expanded-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.4s var(--ease-expo);
+}
+.topic-card.expanded .card-expanded-body { max-height: 800px; }
+
+.card-divider {
+  height: 1px;
+  background: linear-gradient(90deg, var(--card-hover-border), transparent);
+  margin: 0 20px;
+}
+
+.card-details {
+  padding: 14px 20px 20px;
+  background: var(--expand-bg);
+}
+.card-details-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 1.2px;
+  color: var(--tag-color); margin-bottom: 8px;
+  display: flex; align-items: center; gap: 7px;
+}
+.card-details-label::before {
+  content: ''; display: block;
+  width: 14px; height: 1.5px;
+  background: var(--tag-color); border-radius: 1px;
+}
+.card-details-text {
+  font-size: 12.5px; color: var(--text-mid); line-height: 1.72;
+}
+
+/* collapse row at bottom of expanded card */
+.card-collapse-btn {
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+  padding: 8px 20px 10px;
+  font-size: 11px; font-weight: 500;
+  color: var(--text-muted); cursor: pointer;
+  border-top: 1px solid var(--divider);
+  transition: color 0.15s, background 0.15s;
+  background: transparent;
+}
+.card-collapse-btn:hover { color: var(--wb-magenta); background: rgba(203,17,171,0.04); }
+.card-collapse-btn svg { width: 11px; height: 11px; transition: transform 0.2s; }
+.card-collapse-btn:hover svg { transform: translateY(-1px); }
+
+/* stagger */
+.topics-grid .topic-card:nth-child(1)  { animation-delay: 0.02s; }
+.topics-grid .topic-card:nth-child(2)  { animation-delay: 0.05s; }
+.topics-grid .topic-card:nth-child(3)  { animation-delay: 0.08s; }
+.topics-grid .topic-card:nth-child(4)  { animation-delay: 0.11s; }
+.topics-grid .topic-card:nth-child(5)  { animation-delay: 0.14s; }
+.topics-grid .topic-card:nth-child(6)  { animation-delay: 0.17s; }
+.topics-grid .topic-card:nth-child(7)  { animation-delay: 0.20s; }
+.topics-grid .topic-card:nth-child(8)  { animation-delay: 0.23s; }
+.topics-grid .topic-card:nth-child(n+9){ animation-delay: 0.26s; }
+
+/* ═══════════════════════════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+  0%,100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(1.5); opacity: 0.55; }
+}
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes slideOutLeft {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-100%); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MOBILE HEADER (hidden on desktop)
+═══════════════════════════════════════════════════════════ */
+.mobile-header {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 56px;
+  background: var(--sidebar-bg);
+  z-index: 100;
+  align-items: center;
+  padding: 0 16px;
+  gap: 12px;
+  box-shadow: 0 2px 20px rgba(20,0,60,0.35);
+  flex-shrink: 0;
+}
+.mobile-header::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 200% 150% at 110% -20%, rgba(203,17,171,0.2) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.mob-menu-btn {
+  width: 38px; height: 38px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s;
+  position: relative; z-index: 1;
+}
+.mob-menu-btn:active { background: rgba(255,255,255,0.15); }
+.mob-menu-btn svg { width: 18px; height: 18px; }
+
+.mob-logo {
+  flex: 1;
+  display: flex; align-items: center; gap: 8px;
+  position: relative; z-index: 1;
+}
+.mob-logo-mark {
+  font-size: 18px; font-weight: 800;
+  color: var(--wb-pink); letter-spacing: -0.5px;
+}
+.mob-logo-sep { width: 1px; height: 14px; background: rgba(255,255,255,0.2); }
+.mob-logo-label {
+  font-size: 10px; font-weight: 500;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+.mob-theme-btn {
+  width: 38px; height: 38px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; flex-shrink: 0;
+  transition: background 0.2s;
+  position: relative; z-index: 1;
+}
+.mob-theme-btn:active { background: rgba(255,255,255,0.15); }
+.mob-theme-btn svg { width: 16px; height: 16px; }
+
+/* ── Sidebar overlay (mobile) ── */
+.sidebar-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(10,0,30,0.55);
+  z-index: 49;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  animation: fadeIn 0.25s ease both;
+}
+.sidebar-overlay.visible { display: block; }
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE — ≤ 768px
+═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* show mobile header */
+  .mobile-header { display: flex; }
+
+  /* body becomes column, top padding for fixed header */
+  body {
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* sidebar becomes a drawer */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    z-index: 50;
+    transform: translateX(-100%);
+    transition: transform 0.32s cubic-bezier(0.16,1,0.3,1);
+    width: min(300px, 88vw);
+    min-width: unset;
+    padding-top: 0;
+  }
+  .sidebar.mob-open {
+    transform: translateX(0);
+  }
+
+  /* give extra top space in sidebar header for safe area */
+  .sidebar-header {
+    padding-top: 18px;
+  }
+
+  /* main fills below fixed header */
+  .main {
+    flex: 1;
+    padding-top: 56px;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* hide desktop topbar on mobile (we have mobile-header) */
+  .topbar { display: none; }
+
+  /* content scrolls */
+  .content {
+    padding: 20px 16px 80px;
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  /* home screen adjustments */
+  .home-screen { max-width: 100%; }
+  .home-hero { padding: 28px 24px; }
+  .home-h1 { font-size: 30px; letter-spacing: -1px; }
+  .home-sub { font-size: 13px; }
+  .home-stats { gap: 10px; }
+  .stat-pill-num { font-size: 22px; }
+  .stat-pill { padding: 10px 16px; }
+
+  /* info cards: stack to single column */
+  .home-cards {
+    grid-template-columns: 1fr;
+  }
+  .info-card:nth-child(3) { grid-column: unset; }
+
+  /* flow block */
+  .flow-header { padding: 16px 18px 14px; gap: 10px; flex-wrap: wrap; }
+  .flow-header-title { font-size: 13px; }
+  .flow-trigger { padding: 14px 18px; }
+  .flow-cases { padding: 14px 18px 18px; gap: 10px; }
+  .flow-comment { font-size: 10.5px; padding: 6px 10px; }
+
+  /* category view */
+  .cat-header { margin-bottom: 20px; }
+  .cat-title { font-size: 20px; }
+
+  /* cards: single column on small phones */
+  .topics-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  /* card sizing */
+  .card-body { padding: 16px 16px 12px; }
+  .card-title { font-size: 13.5px; }
+  .card-desc, .card-details-text { font-size: 12px; }
+}
+
+/* ── Extra small (≤ 380px) ── */
+@media (max-width: 380px) {
+  .home-h1 { font-size: 26px; }
+  .home-hero { padding: 22px 18px; }
+  .content { padding: 16px 12px 80px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ PASSWORD OVERLAY ═══ -->
+<div id="pw-overlay">
+  <div id="pw-box">
+    <div id="pw-logo">WB <span>·</span> Справочник</div>
+    <div id="pw-title">Введите пароль для доступа</div>
+    <input id="pw-input" type="password" placeholder="Пароль" autocomplete="current-password" />
+    <button id="pw-btn">Войти</button>
+    <div id="pw-error">Неверный пароль. Попробуйте ещё раз.</div>
+  </div>
+</div>
+
+<script>
+(function() {
+  var overlay = document.getElementById('pw-overlay');
+  var input   = document.getElementById('pw-input');
+  var btn     = document.getElementById('pw-btn');
+  var err     = document.getElementById('pw-error');
+
+  // Если уже авторизован в этой сессии — сразу скрываем оверлей
+  if (sessionStorage.getItem('wb-auth') === '1') {
+    overlay.style.display = 'none';
+  }
+
+  function tryLogin() {
+    if (/^wb20\d{2}$/.test(input.value)) {
+      sessionStorage.setItem('wb-auth', '1');
+      overlay.style.display = 'none';
+    } else {
+      err.style.display = 'block';
+      input.classList.remove('shake');
+      void input.offsetWidth; // reflow для перезапуска анимации
+      input.classList.add('shake');
+      input.value = '';
+    }
+  }
+
+  btn.addEventListener('click', tryLogin);
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') tryLogin();
+  });
+})();
+</script>
+<!-- ═══════════════════════════════════════════════════════ -->
+
+
+<!-- ═══ MOBILE HEADER ═══════════════════════════════════════ -->
+<header class="mobile-header">
+  <button class="mob-menu-btn" onclick="toggleMobMenu()" aria-label="Меню">
+    <svg id="mobMenuIcon" viewBox="0 0 18 18" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round">
+      <line x1="2" y1="4.5" x2="16" y2="4.5"/>
+      <line x1="2" y1="9"   x2="16" y2="9"/>
+      <line x1="2" y1="13.5" x2="16" y2="13.5"/>
+    </svg>
+  </button>
+  <div class="mob-logo" onclick="showHome(); closeMobMenu()">
+    <span class="mob-logo-mark">WB</span>
+    <div class="mob-logo-sep"></div>
+    <span class="mob-logo-label">Поддержка</span>
+  </div>
+  <button class="mob-theme-btn" onclick="toggleThemeMob()" aria-label="Сменить тему">
+    <svg id="mobThemeIcon" viewBox="0 0 16 16" fill="none">
+      <circle cx="8" cy="8" r="3" stroke="#FFD060" stroke-width="1.5"/>
+      <path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41" stroke="#FFD060" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </button>
+</header>
+
+<!-- overlay backdrop -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeMobMenu()"></div>
+
+<!-- ═══ SIDEBAR ════════════════════════════════════════════ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-top-row">
+      <div class="logo" onclick="showHome()">
+        <span class="logo-mark">WB</span>
+        <div class="logo-sep"></div>
+        <span class="logo-label">Поддержка</span>
+      </div>
+      <!-- theme toggle -->
+      <div class="theme-toggle" id="themeToggle" title="Сменить тему">
+        <button class="theme-btn active" id="btnLight" onclick="setTheme('light')" title="Светлая тема">
+          <svg viewBox="0 0 16 16" fill="none">
+            <circle cx="8" cy="8" r="3" stroke="#FFD060" stroke-width="1.5"/>
+            <path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41" stroke="#FFD060" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <button class="theme-btn" id="btnDark" onclick="setTheme('dark')" title="Тёмная тема">
+          <svg viewBox="0 0 16 16" fill="none">
+            <path d="M13.5 10.5A6 6 0 0 1 5.5 2.5a6 6 0 1 0 8 8z" stroke="#A0C0FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="sidebar-title">Справочник тем обращений</div>
+  </div>
+
+  <div class="search-wrap">
+    <svg class="search-icon" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="1.5">
+      <circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3.5 3.5" stroke-linecap="round"/>
+    </svg>
+    <input class="search-input" type="text" placeholder="Поиск по темам..." id="searchInput">
+  </div>
+
+  <nav class="nav" id="navList"></nav>
+</aside>
+
+<!-- ═══ MAIN ════════════════════════════════════════════ -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-breadcrumb" id="breadcrumb">
+      <span>Справочник</span>
+    </div>
+    <div class="topbar-count" id="topbarCount" style="display:none"></div>
+  </div>
+  <div class="content" id="content"></div>
+</div>
+
+<!-- ═══ SCRIPT ════════════════════════════════════════════ -->
+<script>
+/* ── DATA ─────────────────────────────────────────────── */
+const DATA = [{"cat":"API","topics":[{"topic":"Генерация API-токенов","desc":"Переводить на любую из этих тематик обращения с упоминанием API/интеграций (предварительно ответив на вопросы, не связанные с API, либо прописать ответы на такие вопросы в комментарии)."},{"topic":"Ошибки в получаемой информации по API","desc":"Переводить на любую из этих тематик обращения с упоминанием API/интеграций (предварительно ответив на вопросы, не связанные с API, либо прописать ответы на такие вопросы в комментарии)."},{"topic":"Интеграция по API","desc":"Переводить на любую из этих тематик обращения с упоминанием API/интеграций (предварительно ответив на вопросы, не связанные с API, либо прописать ответы на такие вопросы в комментарии)."}]},{"cat":"Поиск товара на сайте","topics":[{"topic":"Не ищется бренд в поиске","desc":"Товар не выдаётся по запросу бренда. По запросу бренда выдаётся меньше товаров, чем нужно. Через поле поиска на сайте WB бренд не отображается, происходит автозамена на другой. Не ищется бренд/товары выдаются не в топе. При поиске по наименованию бренда не отображается брендовая подсказка или логотип в ней."},{"topic":"Раздел «Бренды» в каталоге сайта и приложения","desc":"«WB Бренды». Вопросы и проблемы по разделу «Бренды» в каталоге сайта и приложения."},{"topic":"Товар «упал» со своего места в поисковой выдаче","desc":"Причины падения товара при выдаче по поисковому запросу (органическая выдача)."},{"topic":"Товар не выдаётся в городе/стране","desc":"Товар не доступен к заказу в городе/стране, отсутствие товара в стране/городе."},{"topic":"Товар не выдаётся в каталоге","desc":"Отсутствие товара в выдаче в определенном разделе каталога. Товара нет в наличии (поиск по артикулу). Ничего не нашлось по запросу «...» (поиск по артикулу). Товар не выдаётся в каталоге бренда. Товар не выдаётся в магазине продавца."},{"topic":"Товар не выдаётся по поисковому запросу","desc":"Отсутствие товара в выдаче по поисковому запросу. Товар выдается по нерелевантному запросу. Почему в отчете поисковые запросы указан нерелевантный запрос."}]},{"cat":"Безопасность личного кабинета","topics":[{"topic":"Сообщить о мошенничестве","desc":"Продавец указывает в наименовании или описании артикул другого продавца. Жалобы на мошенничество, не связанные с фейк-заказами, например фиктивные отзывы."},{"topic":"Выкуп товара конкурентами","desc":"Обращения о фейк-заказах."},{"topic":"Двухфакторная аутентификация","desc":"Что такое двухфакторная аутентификация. Как подключить двухфакторную аутентификацию. Продавец пишет, что потерял доступ к аккаунту, на котором включена двухфакторная аутентификация."},{"topic":"Несанкционированный вход","desc":"Взлом личного кабинета продавца. Подозрение на взлом личного кабинета."}]},{"cat":"Профиль","topics":[{"topic":"Блокировка личного кабинета продавца","desc":"Полный бан продавца за продажу запрещённых товаров. Блокировка за фрод и мошенничество. Блокировки за проблемный товар. Продавец пишет, что есть бан, но его нет в админке у оператора. Продавец хочет вывести средства при полной блокировке. Частичная блокировка разделов в личном кабинете."},{"topic":"Восстановление доступа в ЛК и смена номера телефона владельца","desc":"Изменение номера телефона владельца. Карантин при изменении номера телефона владельца. Техническая ошибка при входе или действиях в личном кабинете."},{"topic":"Доступы в разделы личного кабинета для пользователей","desc":"Как пригласить нового пользователя. Сколько пользователей можно пригласить. Как отозвать приглашение. Ошибка при создании приглашения. Как настроить доступ пользователей к разделам. Ссылка на приглашение не работает. Вопросы о правах пользователей."},{"topic":"Изменение реквизитов и других данных продавца","desc":"Как поменять ИНН. Как изменить владельца. Как поменять название магазина. Как изменить организационно-правовую форму. Как изменить ФИО учредителя."},{"topic":"Удаление пользователей из личного кабинета продавца","desc":"Вопросы по настройке доступов к разделам ЛК для других пользователей."}]},{"cat":"Подписка Джем","topics":[{"topic":"Что включено","desc":"Любые вопросы о всех функциях подписки, но не вопросы, связанные с тем, что функционал не работает. Что входит в Джем, можно ли докупить лимиты, сколько стоит докупить лимиты, сервис подмены артикула."},{"topic":"Не могу купить подписку","desc":"Обращения, связанные с проблемами, ошибками при покупке подписки. Не удается купить подписку: не прошла оплата, не активировался Джем, как купить Джем. Вопросы, где продавец не может принять участие в акции «3 месяца подписки по цене 2»."},{"topic":"Подписка куплена, но есть вопросы по оплате","desc":"Вопросы о продлении подписки, когда подписка уже активна у продавца: неверно списали денежные средства, пришло уведомление о списании."},{"topic":"Подписка куплена, но доступ к функциям не появился","desc":"Обращения, связанные с проблемами подключения подписки после успешной оплаты. Продавец оплатил подписку, но функционал не работает. Необходимо обратить внимание на то, о каких функциях говорит продавец. Вопросы по автозапуску видео в карточке товара относятся к категории «Карточка товара»."},{"topic":"Как отменить подписку","desc":"Вопросы по отключению подписки. Куда нажать, чтобы отменить подписку. Не получается найти раздел, чтобы отменить подписку."},{"topic":"Оставить пожелания по развитию","desc":"В этой тематике собираются вопросы и предложения по развитию Джема. Например: продавец просит индивидуальные скидки, промокоды для подключения, предложения по расширению функционала."}]},{"cat":"Вопросы о чате с покупателями","topics":[{"topic":"Вопросы о функциях чата с покупателями","desc":"К теме относятся обращения продавцов по: функционалу чата с покупателем; вопросам от покупателей в чате (например, если продавец пишет, что покупатель спрашивает у него, когда будет доставлен товар). Обращения о возвратах от покупателей к этой категории не относятся — их нужно переводить в категорию «Возврат товара покупателями»."}]},{"cat":"Маркетплейс: управление остатками","topics":[{"topic":"Проблемы с загрузкой остатков","desc":"Вопросы о загрузке остатков на портале продавца: как правильно загрузить остатки по модели FBS; как загружать остатки СГТ/КГТ+; не получается загрузить остатки; возникает ошибка при загрузке; система некорректно загрузила остатки."},{"topic":"Товар не в продаже, но есть остаток","desc":"Продавец корректно загрузил остатки при работе по модели FBS, но товар не появился в продаже: «Я загрузил остатки, но товар не появился»; «Почему товар не в продаже?»; «Когда поступит в продажу?»"},{"topic":"Заказы на нулевой остаток","desc":"Вопросы о положительных/нулевых остатках при заказе: продавец получил заказ на нулевой остаток; продавец обнулял остатки, но задание всё равно поступило; продавец не согласен с тем, что задание поступило на положительный остаток."},{"topic":"Управление складами продавца","desc":"Вопросы о том, как создать и управлять складами при работе по модели FBS: создание склада, создание склада для СГТ/КГТ+, удаление и редактирование склада, технические ошибки при редактировании, установка выходных дней."}]},{"cat":"Цифровой арбитраж: предоставить документы","topics":[{"topic":"Пересмотр решения по обращениям правообладателей","desc":"В эту тематику попадают: обращения продавцов, которые получили ответ юриста и не согласны с ним; вопросы разблокировки карточек товаров, заблокированных по линии Цифрового Арбитража (за игнорирование обращения, нарушение товарных знаков и т.д.)."},{"topic":"Цифровой арбитраж: предоставить документы","desc":"В эту тематику попадают: обращения продавцов, которым необходимо предоставить документы в рамках процедуры арбитража (как по уже созданному обращению правообладателя, так и по планируемому); общие вопросы по нарушениям интеллектуальных прав на площадке."}]},{"cat":"Возврат товара продавцу","topics":[{"topic":"Процесс возврата своего товара со склада","desc":"Вопросы, связанные с проблемами при оформлении возврата со склада WB (любой тип возврата) и непосредственно с процедурой возврата. Вопросы по оформлению возврата из отзыва. Вопросы по возвратам и отказам из ленты заказов. Вопросы по стоимости логистики и хранению возврата в ПВЗ."},{"topic":"Доставка возврата задерживается","desc":"Вопросы, связанные с длительным возвратом товара продавцу (возвраты, которые уже отправлены). Вопросы по списанным, утилизированным или проданным товарам, которые были отправлены продавцу. Вопросы по срокам возврата. Ситуации, когда товар задерживался, но исчез из доставки."},{"topic":"Возврат заблокированных товаров","desc":"Вопросы, связанные с процессом возврата товаров по заблокированным карточкам, а также ситуациями, когда возврат по заблокированным карточкам не был оформлен с нашей стороны."},{"topic":"Вернулся не тот товар","desc":"Вопросы, связанные с возвратом товара, если продавцу поступил не его товар (любой тип возврата). Вопрос по компенсации, сторнированию логистики или хранению возврата в ПВЗ. Консультация по оформлению заявки на проверку товара по возвратам SRM и SRV."},{"topic":"Вернулся товар с дефектами","desc":"Вопросы, связанные с возвратом товара ненадлежащего качества или в неполной комплектации/пустой упаковке (любой тип возврата). Вопрос по компенсации, сторнированию логистики. Консультация по оформлению заявки на проверку товара."},{"topic":"Проблема при получении возврата","desc":"Вопросы, связанные с проблемами при получении возврата в ПВЗ: товар не могут найти; отказываются выдавать; выдача проведена, но товар не выдан; жалобы на сотрудников ПВЗ; ошибка QR-кода; ПВЗ закрыт; срок хранения не вышел, но товар утилизирован; ЧП на ПВЗ."},{"topic":"Утилизация товара на складе и ПВЗ","desc":"Вопросы по утилизации товара на складе или в ПВЗ: процесс и причины утилизации; стоимость; вопросы по утилизированным товарам из заказов; запросы на утилизацию по инициативе продавца. Вопросы по актам утилизации переводятся на категорию «Документы»."},{"topic":"Технические вопросы о работе отчёта по возвратам товаров","desc":"Технические вопросы по работе отчёта «Перемещение и возврат товаров»: расшифровка столбцов, статусы возвратов в отчёте, ошибки при формировании отчёта."},{"topic":"Не выплатили компенсацию по производственному браку","desc":"Обрабатывают выделенные сотрудники."}]},{"cat":"Возвраты товаров покупателями","topics":[{"topic":"Вопросы по заявкам от покупателей","desc":"Вопросы, связанные с процессом оформления возврата из раздела «Возвраты покупателей», его особенностями и сложностями при оформлении и рассмотрении заявок от покупателей. Вопросы из чата с покупателем по поводу возврата. Уточнение информации по уже оформленным заявкам."}]},{"cat":"Вопросы об отчётах в разделе «Аналитика»","topics":[{"topic":"Вопросы о сводке на главной странице раздела","desc":"Вопросы, связанные с расхождениями в сводке на главной странице раздела «Аналитика»."},{"topic":"Еженедельная динамика и анализ продаж","desc":"Обращения о неточностях и расхождениях в аналитических отчётах, отображении данных на главной странице, а также о работе и настройках отчёта «Еженедельная динамика и анализ продаж»."},{"topic":"Другие вопросы по отчётам из раздела «Аналитика»","desc":"Все вопросы по отчётам из раздела «Аналитика», которые не подходят под другие темы этой категории."},{"topic":"Сводный по продавцу","desc":"Вопросы о работе с отчётом «Сводный по продавцу», показателях и его настройках."},{"topic":"Доля бренда в продажах","desc":"Вопросы о работе и настройках отображения отчёта «Доля бренда в продажах»."},{"topic":"Отчёт с перечнем номенклатур","desc":"Вопросы о работе и настройках «Отчёта с перечнем номенклатур»."},{"topic":"Отчёт по остаткам на складе","desc":"Вопросы о работе и настройках «Отчёта по остаткам на складе»."},{"topic":"Отчёт «Скрытые товары»","desc":"Вопросы о функционале отчёта по скрытым товарам, расхождениях между данными отчёта и данными продавцов."},{"topic":"Технические вопросы о работе отчёта «Продажи»","desc":"Вопросы про работу, настройку и некорректное отображение данных в отчёте по продажам."}]},{"cat":"Аналитика продавца","topics":[{"topic":"Отчёт «Поставки по регионам»","desc":"Вопросы о работе с отчётом «Поставки по регионам», показателях и его настройках."},{"topic":"Иные вопросы по разделу «Аналитика продавца»","desc":"Все вопросы по разделу «Аналитика продавца», которые не подходят под другие темы этой категории."},{"topic":"Разблокировка раздела «Аналитика продавца»","desc":"Вопросы о разблокировке раздела «Аналитика продавца»."},{"topic":"Отчёт «История остатков»","desc":"Вопросы о работе с отчётом «История остатков», показателях и его настройках."},{"topic":"Отчёт «Воронка продаж»","desc":"Вопросы о работе с отчётом «Воронка продаж», показателях и его настройках."},{"topic":"Предложения по развитию раздела «Аналитика продавца»","desc":"Предложения по развитию раздела «Аналитика продавца»."}]},{"cat":"Аналитика площадки","topics":[{"topic":"Предложения по развитию раздела «Аналитика площадки»","desc":"Предложения по развитию раздела «Аналитика площадки»."},{"topic":"Отчёт «Анализ ниш»","desc":"Вопросы о работе с отчётом «Анализ ниш»."},{"topic":"Отчёт «Сравнение карточек»","desc":"Вопросы о работе с отчётом «Сравнение карточек»."},{"topic":"Иные вопросы о разделе «Аналитика площадки»","desc":"Все вопросы по разделу «Аналитика площадки», которые не подходят под другие темы этой категории."},{"topic":"Вопросы о работе в разделе «Аналитика площадки»","desc":"Вопросы, связанные с назначением отчётов и способами их интерпретации."}]},{"cat":"Проблемный товар","topics":[{"topic":"Вопросы об отчёте о проблемных товарах","desc":"Вопросы, связанные с отчётом о проблемном товаре и расчётом коэффициента. Вопросы по товарам из отчёта и причинам их включения. Вопросы о том, как оформить возврат товара из отчёта."}]},{"cat":"Бренды","topics":[{"topic":"Вопросы по кабинету бренда","desc":"Заявки на доступ к кабинету бренда. Как получить доступ к кабинету бренда. Как добавить бренд. Сроки рассмотрения заявки. Сколько брендов может быть в ЛК. Сколько представителей может быть у бренда. Ошибки при подаче заявки на представительство. Удаление заявки. Отказ в доступе к кабинету."},{"topic":"Создание бренда","desc":"Вопросы о создании бренда. Склейка. Модерация заявки на создание бренда. Ошибки при модерации брендов."}]},{"cat":"Вопросы о балансе и отчётах реализации","topics":[{"topic":"Проверка штрафов за габариты упаковки товара","desc":"Вопросы по замерам товаров на складах. Несогласие с выставленным штрафом «Занижение фактических габаритов товара». Оспаривание замеров, вопросы по процессу замеров и отчётам по удержаниям."},{"topic":"Удержания и штрафы в отчётах реализации","desc":"Вопросы по прочим удержаниям и штрафам в отчётах реализации. Штраф за намеренное занижение веса товара."},{"topic":"Расчёт стоимости логистики","desc":"Вопросы по расчёту стоимости логистики в отчётах реализации."},{"topic":"Вопросы о компенсации","desc":"Вопросы о начислении компенсации товара по списанным товарам и в отчётах реализации."},{"topic":"Вкладка «Баланс», виджет и график","desc":"Вопросы по суммам, начисленным в виджете и графике баланса."},{"topic":"Вопросы о задолженности","desc":"Вопросы по погашению задолженности продавцов."},{"topic":"Нет данных в отчёте реализации или они неправильные","desc":"Вопросы по отсутствующим данным в отчётах реализации или некорректном расчёте сумм. Конкретные вопросы по минимальному платежу за «Конструктор тарифов»: за что поступило удержание, как была рассчитана сумма."},{"topic":"Коэффициент вознаграждения Wildberries: расчёты и начисление","desc":"Вопросы по начислению сумм комиссии в отчётах реализации."},{"topic":"Выплата отклонена: неактивная кнопка вывода","desc":"Вопросы о неактивной кнопке вывода сумм с баланса."},{"topic":"Деньги не пришли на счёт после вывода","desc":"Вопросы по выведенным средствам с баланса. Почему сумма не поступила на счёт продавца."},{"topic":"Сумма вывода не совпадает с отчётом реализации","desc":"Вопросы, связанные с расхождением суммы, предоставленной к выводу, и суммы, указанной в отчёте реализации."},{"topic":"Нет еженедельного или ежедневного отчёта в Excel","desc":"На портале не сформировались детализация и дашборд детализации еженедельного и ежедневного отчёта."},{"topic":"Расхождение между детализацией недельного отчёта и печатной формой","desc":"Вопросы о расхождении сумм в детализации недельного отчёта и печатной форме."}]},{"cat":"Программа лояльности","topics":[{"topic":"Лояльность по категориям","desc":"Все вопросы, связанные только с лояльностью по отдельным категориям."},{"topic":"Награды","desc":"Вопросы о наградах за уровни в программе лояльности."},{"topic":"Цели","desc":"Вопросы о целях для повышения или сохранения уровня в программе лояльности."},{"topic":"Общая программа лояльности","desc":"Общие вопросы по общей (основной) программе лояльности."},{"topic":"Уровни","desc":"Вопросы об уровнях в программе лояльности."}]},{"cat":"Значок «Оригинал»","topics":[{"topic":"Значок «Оригинал»: заявка на получение","desc":"Тема для подачи заявок на получение значка «Оригинал». Продавец подаёт заявку, заявка проверяется поддержкой продавцов и юристами, принимается решение по заявке. Тему обрабатывает выделенный сотрудник."},{"topic":"Значок «Оригинал»: вопросы и решение проблем","desc":"Все вопросы при получении или использовании значка «Оригинал». Вопросы по процедуре подачи заявки: какие поля заполнить, необходимый пакет документов. Общие вопросы, не касающиеся профессиональной юридической консультации."}]},{"cat":"Маркетплейс: Сортировка и маркировка товаров","topics":[{"topic":"Маркетплейс: сортировка товара в ПВЗ и СЦ","desc":"Вопросы о задержке сортировки заданий на СЦ или складе при работе по системе FBS: «Сдал поставку на СЦ, но задания до сих пор не отсортировали»; «Сдал поставку в ПВЗ, короб отвезли на СЦ, но сортировки нет»; общие вопросы о сортировке заданий."},{"topic":"Маркетплейс: статус товара в ПВЗ","desc":"Вопросы о статусе поставок, сданных в ПВЗ, при работе по модели FBS: «Привозил поставку в ПВЗ, короб до сих пор не вывезли»; «Курьеры отказываются вывозить короба»; вопросы о статусах поставок WB-MP."},{"topic":"Потеряли товар на приёмке","desc":"Продавец заявляет, что его товар, отгруженный по системе FBS, был потерян: «Сдал поставку на СЦ, но долгое время не происходит сортировка»; «Я сдавал поставку месяц назад, а движения по товарам нет»."},{"topic":"Брак","desc":"Вопросы о статусе «Найдены дефекты» в списке сборочных заданий: «Почему у моего задания статус «Найдены дефекты»?»; «Какие дефекты были найдены?»; «Где сейчас находится товар?»"}]},{"cat":"Маркетплейс: взаиморасчёты, рейтинг доставки и блокировки","topics":[{"topic":"Маркетплейс: Вопросы о штрафах","desc":"Продавцы задают вопросы по штрафам при работе по модели FBS: «За что был начислен штраф?»; некорректное начисление штрафов «Штраф МП. Невыполненный заказ», «Невыполненный заказ (отправка товара, отличного от заявленного)», «Отгрузка на иной СЦ»; «Можно ли пересчитать или отменить штраф?»."}]},{"cat":"Маркетплейс: отгрузка товара в пункте приёма","topics":[{"topic":"Вопросы о въезде на территорию складов и СЦ","desc":"Вопросы о въезде и пребывании на территории СЦ или склада при работе по модели FBS: как заехать на склад; на чём можно заехать; можно ли прийти пешком; правила нахождения на складе; нахождение транспортного средства в чёрном списке."},{"topic":"ПВЗ не принял поставку","desc":"Обращения, связанные с отказом ПВЗ принять поставку от продавца."},{"topic":"Мою поставку развернули","desc":"Вопросы о причинах разворота поставки, отгруженной на склад или СЦ: «Почему развернули поставку?»; «Разберитесь с сотрудниками склада»; «Как исправить ошибки, из-за которых нас не пустили?»"},{"topic":"Общие вопросы о поставке в ПВЗ","desc":"Продавцы не могут сдавать товары на ПВЗ. Тема выделена для вопросов о закрытии ОВХ."}]},{"cat":"Документы","topics":[{"topic":"Вопросы о выставленных документах","desc":"Вопросы продавцов относительно документов, которые им выставляет WB в рамках бухучёта: отчёты, акты, уведомления о выкупе, УПД и т.д."},{"topic":"Некорректные документы","desc":"Обращения продавцов относительно корректности выставленных WB бухгалтерских документов."},{"topic":"Обработка персональных данных","desc":"Вопросы относительно сбора, хранения, возможности доступа и отзыва персональных данных."},{"topic":"Нет еженедельного отчёта реализации в разделе «Документы»","desc":"Вопросы, связанные с тем, что у продавца отсутствует отчёт или его печатная форма, а также УПД к этому отчёту."}]},{"cat":"Тарифы","topics":[{"topic":"Вопросы о размере комиссии","desc":"Вопросы продавцов по комиссии WB: как считается комиссия и от чего зависит; где смотреть комиссию на свою категорию товара; какая сумма перечисляется продавцу; почему в отчётах иногда отображается увеличенная комиссия (в том числе по конструктору тарифов)."}]},{"cat":"Завершение сотрудничества","topics":[{"topic":"Общие вопросы о закрытии личного кабинета","desc":"Вопросы по завершению сотрудничества: продавец хочет завершить сотрудничество; продавец спрашивает об итоговых документах; продавец спрашивает об условиях завершения сотрудничества."},{"topic":"Вступление в наследство","desc":"Обращения от наследников умерших продавцов. Любые обращения о получении наследства или о вступлении в наследство."}]},{"cat":"Блокировка карточек","topics":[{"topic":"Вопросы о блокировке карточек","desc":"К этой теме относятся вопросы: как разблокировать карточку товара; какие причины блокировки карточки товара; уточнения по списку запрещённых товаров. Исключение: для категорий «Продукты питания, БАДы и Корма для животных» существует отдельная тема «Вопросы по блокировке»."}]},{"cat":"Маркировка товара","topics":[{"topic":"Отгрузка маркированного товара монопалетами","desc":"Вопросы, связанные с отгрузкой монопаллетой: как отгрузить товар монопаллетой; как маркировать монопалеты; не получается сформировать поставку монопаллетой; ошибки при формировании поставки."},{"topic":"Вопросы об УПД на товары с обязательной маркировкой","desc":"Все вопросы, связанные с УПД ДОП: как сформировать при отгрузке с типом «короб» или «монопаллета»; как правильно заполнить поля; почему отклонили УПД; не подписываем документ; не получили черновик УПД; вопросы по CSV-файлу."},{"topic":"Не подписан выставленный УПД с кодами маркировки","desc":"Фактически пишут то же самое, что и в тему «Вопросы об УПД на товары с обязательной маркировкой»."},{"topic":"Отклонён выставленный УПД с кодами маркировки","desc":"Фактически пишут то же самое, что и в тему «Вопросы об УПД на товары с обязательной маркировкой»."}]},{"cat":"Маркировка ювелирных украшений и ГИИС ДМДК","topics":[{"topic":"Маркировка ювелирных украшений УИН","desc":"Базовые вопросы по маркировке ювелирных украшений."},{"topic":"УИН отсутствуют или некорректно отображаются в акте приёмки","desc":"Вопросы по приёмке и отображению УИН в акте приёмки."},{"topic":"Вывод из оборота кодов маркировки УИН","desc":"Вопросы продавцов по схеме «Маркетплейс» по процедуре самостоятельного вывода кодов из оборота."},{"topic":"Заполнение и отправка спецификации с обязательной маркировкой УИН в системе ГИИС ДМДК","desc":"Как правильно заполнять спецификации по модели FBW. Как правильно заполнять спецификации по модели FBS. Как правильно заполнять спецификации по модели FBS при возврате товара на склады компании."},{"topic":"Не подписана или отклонена отправленная спецификация с кодами маркировки УИН","desc":"Отклонена спецификация. Спецификация не подписана. Ошибки по спецификациям в соответствующем отчёте на портале."},{"topic":"Возврат товаров с маркировкой УИН","desc":"Не получили спецификацию на возврат по УИН, товар фактически возвращён."}]},{"cat":"Обучение: PRO WB","topics":[{"topic":"Вопросы об образовательном контенте","desc":"Вопросы по содержимому обучающих курсов на портале продавца: особенности обучения; как получить обратную связь по курсу; какие темы для обучения. Вопросы по семинарам, вебинарам, конференциям ProWB: где найти ссылку; какие вебинары проводятся."},{"topic":"Организационные вопросы об обучении","desc":"Вопросы по обучающим курсам: как подключиться; какой формат обучения; стоимость. Вопросы по мероприятиям ProWB: как записаться; как отменить запись; где найти видеозапись вебинара."},{"topic":"Технические сложности в обучении","desc":"Вопросы по обучающим курсам: не грузятся курсы; ошибки в материале. Вопросы по мероприятиям ProWB: не приходит SMS с кодом; не работает переход по ссылке; не работает трансляция."},{"topic":"Вопросы от специалистов PRO WB","desc":"Вопросы от продавцов, когда с ними проводят встречи специалисты PRO WB."}]},{"cat":"Отзывы","topics":[{"topic":"Ошибки в разделе «Отзывы и вопросы»","desc":"Жалоба на проверке более 30 дней. Почему везде разное количество отзывов. Прибавились оценки в отчёте, но фактически их нет. Верните отзыв в рейтинг. Отзыв скорректирован, но в рейтинге не учитывается. Нейросеть отвечает на вопросы неправильно. Технические ошибки в разделе."},{"topic":"Рейтинг товара по отзывам","desc":"Как рассчитывается рейтинг товара. Как работает коэффициент затухания. В чём разница между рейтингом карточки и артикула. Нестандартные вопросы по рейтингу товара и его расчёту."}]},{"cat":"Карточка товара","topics":[{"topic":"Загрузка фото и видео","desc":"Вопросы о том, как загружать фото и видео, проблемы и ошибки, связанные с этим процессом."},{"topic":"Изменение и добавление категории товара","desc":"Вопросы о том, как изменить или добавить категорию товара в карточке товара."},{"topic":"Указание и отображение размеров","desc":"Вопросы о том, как правильно указать размер и как размеры отображаются в карточке товара."},{"topic":"Загрузка баркодов","desc":"Вопросы, связанные с загрузкой баркодов."},{"topic":"Загрузка рекомендаций","desc":"Вопросы, связанные с созданием собственных рекомендаций для карточки товара."},{"topic":"Объединение артикулов","desc":"Вопросы о процедуре объединения артикулов при создании карточки товара."},{"topic":"Оценка качества карточки: рейтинг карточки","desc":"Вопросы, связанные с отображением рейтинга карточки, его влиянием на ранжирование, улучшением рейтинга и рекомендациями по заполнению карточки."},{"topic":"Удаление карточки, размера","desc":"Вопросы о том, как удалить размер из карточки товара."},{"topic":"Предложения по развитию раздела «Карточка товара»","desc":"В эту тему продавцы могут присылать предложения и рекомендации по улучшению функционала «Карточка товара»."},{"topic":"Создание карточки товара","desc":"Вопросы, связанные с созданием карточки и её редактированием при создании, проблемы и сложности в процессе."},{"topic":"Вопросы о габаритах упаковки в карточке товара","desc":"Вопросы о том, как правильно указать габариты упаковки в карточке товара и как исправить данные, если они были указаны неправильно."},{"topic":"Рич-контент: вопросы и решение проблем","desc":"Вопросы о создании рич-контента в карточке товара и влиянии на продажи и рейтинг."},{"topic":"Добавление и редактирование цены","desc":"Вопросы и сложности по добавлению и редактированию цен на товары."},{"topic":"Редактирование карточки товара","desc":"Описание процесса редактирования уже созданных карточек товара и решения проблем с сохранением изменений."},{"topic":"18+/блюр","desc":"Особенности работы с товарами 18+ на Wildberries и правила их оформления. Вопросы о снятии метки 18+."},{"topic":"Виртуальная фотостудия","desc":"Вопросы, связанные с использованием функции «Виртуальная фотостудия»: пошаговая инструкция и требования к фото."},{"topic":"Сертификаты и декларации","desc":"Вопросы о заполнении данных о сертификатах или декларациях соответствия; ошибках при заполнении; обязательных полях для медицинских изделий; значке «Документы проверены»; причинах отклонения декларации или сертификата."}]},{"cat":"Цены, скидки, акции","topics":[{"topic":"Как изменить или установить цену и скидку","desc":"Как установить или поменять цену и скидку. Как формируются цены, которые покупатель видит в карточке товара. Как проверить обновление цен и скидок. Как проверить, кто изменил цены. Что такое скидка WB Клуба и как ею управлять."},{"topic":"Установка цен и скидок через Excel-файл","desc":"Как установить цены или скидки через файл. Как выглядит файл и какие столбцы нужно заполнять. Что делать, если файл не скачивается."},{"topic":"Не получается изменить или установить цену","desc":"Что делать, если не обновляются цены или изменения не отображаются на клиентском сайте. Что такое перезаказ. Что такое карантин и как он работает. Как продавцу узнать, что товар в карантине."},{"topic":"Вопросы о скидке WB","desc":"Что такое скидка WB. Как проверить наличие скидки WB. Что делать, если продавец хочет отключить или убрать скидку WB на части или всех товарах."},{"topic":"Как принять участие в акции","desc":"Какие бывают акции и как они работают. Как добавить все товары в автоакцию. Статус участия в акциях. Что такое календарь акций и анонсы акций. Как работать с файлом акции."},{"topic":"Продвижение товара в акциях","desc":"Как акции влияют на продвижение товара. Какие бывают уровни продвижения. Что такое шкала прогресса. Что делать, если товар не поднялся со своей позиции в выдаче."},{"topic":"Как убрать товары из акции","desc":"Как убрать товары из обычной акции и автоакции. Что такое минимальная цена и блокировка в автоакциях. Как настроить и убрать минимальную цену и блокировку."},{"topic":"Мой товар не попал в акцию, хотя по условиям подходит","desc":"Что делать, если продавец утверждает, что товар подходит под условия акции, но не участвует в ней (нет плашки)."},{"topic":"Проблемы с Excel-файлом для акции","desc":"Что делать, если у продавца проблемы с файлом для акции: файл не скачивается или скачивается пустым."}]},{"cat":"Продвижение","topics":[{"topic":"Бонусы и кэшбеки","desc":"Обрабатывает отдельная команда. Вопросы по продвижению переводим на любую тему категории «Продвижение», кроме СТ (предварительно ответив на вопросы, не связанные с продвижением)."},{"topic":"Виды и стоимость продвижения","desc":"Обрабатывает отдельная команда. Вопросы по продвижению переводим на любую тему категории «Продвижение», кроме СТ (предварительно ответив на вопросы, не связанные с продвижением)."},{"topic":"Брендзона","desc":"Обрабатывает отдельная команда. Вопросы по продвижению переводим на любую тему категории «Продвижение», кроме СТ (предварительно ответив на вопросы, не связанные с продвижением)."},{"topic":"Вопросы о WB Guru","desc":"Обрабатывает отдельная команда. Вопросы по продвижению переводим на любую тему категории «Продвижение», кроме СТ (предварительно ответив на вопросы, не связанные с продвижением)."},{"topic":"ВБ.Медиа","desc":"Обрабатывает отдельная команда. Вопросы по продвижению переводим на любую тему категории «Продвижение», кроме СТ (предварительно ответив на вопросы, не связанные с продвижением)."},{"topic":"Обратная связь о качестве консультации по ВБ.Продвижению","desc":"Обрабатывает отдельная команда. Вопросы по продвижению переводим на любую тему категории «Продвижение», кроме СТ (предварительно ответив на вопросы, не связанные с продвижением)."},{"topic":"Внешний трафик UTM-метки","desc":"Обрабатывает отдельная команда. Вопросы по продвижению переводим на любую тему категории «Продвижение», кроме СТ (предварительно ответив на вопросы, не связанные с продвижением)."},{"topic":"Удержание за продвижение","desc":"Обрабатывает отдельная команда. Вопросы по продвижению переводим на любую тему категории «Продвижение», кроме СТ (предварительно ответив на вопросы, не связанные с продвижением)."},{"topic":"Баланс кабинета ВБ.Продвижение","desc":"Обрабатывает отдельная команда. Вопросы по продвижению переводим на любую тему категории «Продвижение», кроме СТ (предварительно ответив на вопросы, не связанные с продвижением)."},{"topic":"Проблемы со входом в кабинет ВБ.Продвижения и ВБ.Медиа","desc":"Обрабатывает отдельная команда. Вопросы по продвижению переводим на любую тему категории «Продвижение», кроме СТ (предварительно ответив на вопросы, не связанные с продвижением)."},{"topic":"Возврат средств со счёта кабинета ВБ.Продвижение","desc":"Обрабатывает отдельная команда. Вопросы по продвижению переводим на любую тему категории «Продвижение», кроме СТ (предварительно ответив на вопросы, не связанные с продвижением)."},{"topic":"API инструментов продвижения","desc":"Обрабатывает отдельная команда. Вопросы по продвижению переводим на любую тему категории «Продвижение», кроме СТ (предварительно ответив на вопросы, не связанные с продвижением)."},{"topic":"Статистика кампаний в ВБ.Продвижении","desc":"Обрабатывает отдельная команда. Вопросы по продвижению переводим на любую тему категории «Продвижение», кроме СТ (предварительно ответив на вопросы, не связанные с продвижением)."},{"topic":"Модерация ВБ.Медиа и брендзоны","desc":"Обрабатывает отдельная команда. Вопросы по продвижению переводим на любую тему категории «Продвижение», кроме СТ (предварительно ответив на вопросы, не связанные с продвижением)."},{"topic":"Показы кампаний ВБ.Продвижение","desc":"Обрабатывает отдельная команда. Вопросы по продвижению переводим на любую тему категории «Продвижение», кроме СТ (предварительно ответив на вопросы, не связанные с продвижением)."}]},{"cat":"Логистика","topics":[{"topic":"Статус заказа","desc":"Вопросы, связанные с тем, на каком этапе и где находится заказ. Задержки в транспортировке. Возврат товаров КБ, которые не доехали до СЦ WB. Отмена заказов."}]}];
+
+/* ── STATE ────────────────────────────────────────────── */
+let currentCat = null;
+
+/* ── THEME ────────────────────────────────────────────── */
+function setTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  document.getElementById('btnLight').classList.toggle('active', t === 'light');
+  document.getElementById('btnDark').classList.toggle('active',  t === 'dark');
+  localStorage.setItem('wb-theme', t);
+}
+// restore saved theme
+(function(){ const s = localStorage.getItem('wb-theme'); if(s) setTheme(s); })();
+
+/* ── HELPERS ──────────────────────────────────────────── */
+function shorten(str, n) {
+  if (!str || str.length <= n) return str;
+  return str.slice(0, n).trim() + '…';
+}
+
+const totalTopics = DATA.reduce((a,v) => a + v.topics.length, 0);
+
+/* ── BUILD NAV ────────────────────────────────────────── */
+function buildNav(q) {
+  const nav = document.getElementById('navList');
+  nav.innerHTML = '';
+  q = (q || '').toLowerCase().trim();
+
+  DATA.forEach((item, ci) => {
+    const matchCat = !q || item.cat.toLowerCase().includes(q);
+    const matchedTopics = q
+      ? item.topics.filter(t => t.topic.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q))
+      : item.topics;
+    if (!matchCat && matchedTopics.length === 0) return;
+
+    const div = document.createElement('div');
+    div.className = 'nav-item' + (currentCat === ci ? ' active open' : '');
+    div.dataset.ci = ci;
+
+    div.innerHTML = `
+      <div class="nav-cat">
+        <span class="nav-cat-text">${item.cat}</span>
+        <svg class="nav-arrow" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"><polyline points="4,2 8,6 4,10"/></svg>
+      </div>
+      <div class="nav-topics">
+        ${matchedTopics.map(t => {
+          const ti = item.topics.indexOf(t);
+          return `<div class="nav-topic${currentCat===ci ? ' active' : ''}" data-ci="${ci}" data-ti="${ti}">${t.topic}</div>`;
+        }).join('')}
+      </div>`;
+
+    // click category:
+    // desktop → toggle open + navigate in one tap (existing behavior)
+    // mobile  → first tap just expands, second tap navigates
+    div.querySelector('.nav-cat').addEventListener('click', () => {
+      const isOpen = div.classList.contains('open');
+      const isActive = currentCat === ci;
+
+      if (isMobile()) {
+        if (!isOpen) {
+          // first tap on mobile: just expand, close others
+          document.querySelectorAll('.nav-item.open').forEach(el => { if(el!==div) el.classList.remove('open'); });
+          div.classList.add('open');
+        } else if (!isActive) {
+          // second tap on mobile: now navigate
+          document.querySelectorAll('.nav-item').forEach(el => { if(el!==div) el.classList.remove('active'); });
+          div.classList.add('active');
+          showCategory(ci);
+        } else {
+          // already open and active → collapse and go home
+          div.classList.remove('open', 'active');
+          currentCat = null;
+          showHome();
+        }
+      } else {
+        // desktop: one-tap behavior
+        if (isOpen && isActive) {
+          div.classList.remove('open', 'active');
+          currentCat = null;
+          showHome();
+        } else {
+          document.querySelectorAll('.nav-item.open').forEach(el => { if(el!==div) el.classList.remove('open'); });
+          div.classList.add('open', 'active');
+          document.querySelectorAll('.nav-item').forEach(el => { if(el!==div) el.classList.remove('active'); });
+          showCategory(ci);
+        }
+      }
+    });
+
+    // click topic → scroll to card
+    div.querySelectorAll('.nav-topic').forEach(el => {
+      el.addEventListener('click', e => {
+        e.stopPropagation();
+        const ti = parseInt(el.dataset.ti);
+        if (currentCat !== ci) showCategory(ci);
+        setTimeout(() => {
+          const card = document.querySelector(`.topic-card[data-ti="${ti}"]`);
+          if (card) {
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // highlight briefly
+            card.style.boxShadow = '0 0 0 2px var(--wb-magenta)';
+            setTimeout(() => card.style.boxShadow = '', 1000);
+          }
+        }, currentCat !== ci ? 80 : 0);
+        document.querySelectorAll('.nav-topic').forEach(x => x.classList.remove('active'));
+        el.classList.add('active');
+        if (isMobile()) setTimeout(closeMobMenu, 120);
+      });
+    });
+
+    nav.appendChild(div);
+  });
+
+  if (nav.children.length === 0) {
+    nav.innerHTML = '<div style="color:rgba(255,255,255,0.28);padding:16px 24px;font-size:12px;">Ничего не найдено</div>';
+  }
+}
+
+/* ── SHOW HOME ────────────────────────────────────────── */
+function showHome() {
+  currentCat = null;
+  document.getElementById('breadcrumb').innerHTML = '<span>Справочник</span>';
+  document.getElementById('topbarCount').textContent = `${DATA.length} категории · ${totalTopics} тем`;
+
+  document.getElementById('content').innerHTML = `
+    <div class="home-screen">
+      <div class="home-hero">
+        <div class="home-tag">WB · Внутренний справочник</div>
+        <h1 class="home-h1">Справочник<br>тем <span>обращений</span></h1>
+        <p class="home-sub">Единый источник актуальных тем и категорий для классификации обращений продавцов в службу поддержки.</p>
+        <div class="home-stats">
+          <div class="stat-pill">
+            <span class="stat-pill-num">${DATA.length}</span>
+            <span class="stat-pill-label">Категорий</span>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-pill-num">${totalTopics}</span>
+            <span class="stat-pill-label">Тем</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="home-cards">
+        <div class="info-card">
+          <div class="info-card-label">Что это</div>
+          <div class="info-card-text">
+            Справочник сформирован на основе листа <strong>«ИТОГ тематики»</strong> из Google-таблицы <strong>«График техпод КИТАЙ 2.0»</strong>. Он отражает актуальную структуру тем, которые операторы используют при обработке входящих обращений продавцов.
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Обновление</div>
+          <div class="info-card-text">
+            Справочник будет <strong>постепенно обновляться</strong> по мере изменения структуры тематик. При добавлении новых категорий или изменении описаний — документ актуализируется в приоритетном порядке.
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Для кого</div>
+          <div class="info-card-text">
+            При <strong>смене темы обращения</strong> операторы могут ориентироваться на этот справочник — здесь описано, какие именно ситуации относятся к каждой теме, какие примеры вопросов характерны для категории, и куда перенаправить обращение при необходимости.
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-block">
+        <div class="flow-header">
+          <div>
+            <div class="flow-header-title">Флоу: если подходящей темы нет</div>
+            <div class="flow-header-sub">Инструкция при проверке и смене темы обращения</div>
+          </div>
+          <div class="flow-tag">Обязательно</div>
+        </div>
+
+        <div class="flow-trigger">
+          <div class="flow-trigger-text">
+            Когда оператор начинает работу с диалогом, он <strong>проверяет корректность темы</strong>, выбранной продавцом или предыдущим оператором, и при необходимости меняет её. В зависимости от ситуации — действует по одному из сценариев ниже.
+          </div>
+        </div>
+
+        <div class="flow-cases">
+          <div class="flow-case">
+            <div class="flow-case-bar red"></div>
+            <div class="flow-case-inner">
+              <div class="flow-case-cond">Подходящей темы нет на платформе или оператор не может её найти</div>
+              <div class="flow-case-action">Тему менять <strong>не следует</strong>. Необходимо оставить комментарий:</div>
+              <div class="flow-comment">
+                <svg class="flow-comment-icon" width="13" height="13" viewBox="0 0 13 13" fill="none">
+                  <rect x="1" y="1" width="11" height="9" rx="2" stroke="currentColor" stroke-width="1.3"/>
+                  <path d="M4 11l2.5-2H12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M4 4.5h5M4 6.5h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                </svg>
+                «Тема не была изменена, так как корректная тема отсутствует на платформе»
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-case">
+            <div class="flow-case-bar amber"></div>
+            <div class="flow-case-inner">
+              <div class="flow-case-cond">Оператор не уверен, что новая тема полностью покрывает вопрос</div>
+              <div class="flow-case-action">Тему <strong>изменить на ближайшую</strong> подходящую. Необходимо оставить комментарий:</div>
+              <div class="flow-comment">
+                <svg class="flow-comment-icon" width="13" height="13" viewBox="0 0 13 13" fill="none">
+                  <rect x="1" y="1" width="11" height="9" rx="2" stroke="currentColor" stroke-width="1.3"/>
+                  <path d="M4 11l2.5-2H12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M4 4.5h5M4 6.5h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                </svg>
+                «Тема была изменена на ближайшую соответствующую вопросу, требуется уточнение содержания темы»
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-case">
+            <div class="flow-case-bar green"></div>
+            <div class="flow-case-inner">
+              <div class="flow-case-cond">Оператор уверен в корректности выбранной темы</div>
+              <div class="flow-case-action"><strong>Изменить тему</strong> на корректную. Комментарий оставлять не требуется.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="home-hint" style="margin-top:24px;">Выберите категорию в меню слева для просмотра тематик и описаний</div>
+    </div>`;
+
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active', 'open'));
+  document.querySelectorAll('.nav-topic').forEach(el => el.classList.remove('active'));
+}
+
+/* ── SHOW CATEGORY ────────────────────────────────────── */
+function showCategory(ci) {
+  currentCat = ci;
+  const item = DATA[ci];
+
+  document.getElementById('breadcrumb').innerHTML = `
+    <span class="link" onclick="showHome()">Справочник</span>
+    <span class="sep">›</span>
+    <span class="current">${item.cat}</span>`;
+  document.getElementById('topbarCount').textContent = `${item.topics.length} тем`;
+
+  document.getElementById('content').innerHTML = `
+    <div class="cat-header">
+      <div class="cat-tag">Категория · ${ci + 1} из ${DATA.length}</div>
+      <h2 class="cat-title">${item.cat}</h2>
+      <div class="cat-meta">Нажмите на карточку, чтобы раскрыть описание</div>
+    </div>
+    <div class="topics-grid">
+      ${item.topics.map((t, ti) => {
+        const hasDesc = t.desc && t.desc.trim();
+        return `
+        <div class="topic-card" data-ci="${ci}" data-ti="${ti}" onclick="toggleCard(this,${ci},${ti})">
+          <div class="card-accent"></div>
+          <div class="card-body">
+            <div class="card-index">${String(ti+1).padStart(2,'0')}</div>
+            <div class="card-title">${t.topic}</div>
+            ${hasDesc
+              ? `<div class="card-desc">${shorten(t.desc, 140)}</div>
+                 <div class="card-tap-hint">
+                   <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="2,4 6,8 10,4"/></svg>
+                   Нажмите, чтобы посмотреть полное описание темы
+                 </div>`
+              : `<div class="card-desc empty">Описание отсутствует</div>`
+            }
+          </div>
+          ${hasDesc ? `
+          <div class="card-expanded-body">
+            <div class="card-divider"></div>
+            <div class="card-details">
+              <div class="card-details-label">Полное описание</div>
+              <div class="card-details-text">${t.desc}</div>
+            </div>
+            <div class="card-collapse-btn" onclick="collapseCard(event, this)">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="2,8 6,4 10,8"/></svg>
+              Свернуть
+            </div>
+          </div>` : ''}
+        </div>`;
+      }).join('')}
+    </div>`;
+
+  // update nav state
+  document.querySelectorAll('.nav-item').forEach(el => {
+    el.classList.toggle('active', parseInt(el.dataset.ci) === ci);
+    if (parseInt(el.dataset.ci) === ci) el.classList.add('open');
+  });
+}
+
+/* ── CARD TOGGLE ──────────────────────────────────────── */
+function toggleCard(el, ci, ti) {
+  const wasExpanded = el.classList.contains('expanded');
+  document.querySelectorAll('.topic-card.expanded').forEach(c => c.classList.remove('expanded'));
+  if (!wasExpanded) el.classList.add('expanded');
+}
+
+function collapseCard(e, btn) {
+  e.stopPropagation();
+  btn.closest('.topic-card').classList.remove('expanded');
+}
+
+/* ── SEARCH ───────────────────────────────────────────── */
+let _st;
+document.getElementById('searchInput').addEventListener('input', e => {
+  clearTimeout(_st);
+  _st = setTimeout(() => buildNav(e.target.value), 170);
+});
+
+/* ── MOBILE MENU ──────────────────────────────────────── */
+function isMobile() { return window.innerWidth <= 768; }
+
+function openMobMenu() {
+  document.getElementById('sidebar').classList.add('mob-open');
+  document.getElementById('sidebarOverlay').classList.add('visible');
+  document.body.style.overflow = 'hidden';
+  // switch to X icon
+  document.getElementById('mobMenuIcon').innerHTML = `
+    <line x1="3" y1="3" x2="15" y2="15"/>
+    <line x1="15" y1="3" x2="3" y2="15"/>`;
+}
+
+function closeMobMenu() {
+  document.getElementById('sidebar').classList.remove('mob-open');
+  document.getElementById('sidebarOverlay').classList.remove('visible');
+  document.body.style.overflow = '';
+  // switch back to burger icon
+  document.getElementById('mobMenuIcon').innerHTML = `
+    <line x1="2" y1="4.5" x2="16" y2="4.5"/>
+    <line x1="2" y1="9" x2="16" y2="9"/>
+    <line x1="2" y1="13.5" x2="16" y2="13.5"/>`;
+}
+
+function toggleMobMenu() {
+  const isOpen = document.getElementById('sidebar').classList.contains('mob-open');
+  isOpen ? closeMobMenu() : openMobMenu();
+}
+
+/* ── MOBILE THEME TOGGLE ──────────────────────────────── */
+function toggleThemeMob() {
+  const cur = document.documentElement.getAttribute('data-theme');
+  const next = cur === 'dark' ? 'light' : 'dark';
+  setTheme(next);
+  // update mob icon
+  const icon = document.getElementById('mobThemeIcon');
+  if (next === 'dark') {
+    icon.innerHTML = `<path d="M13.5 10.5A6 6 0 0 1 5.5 2.5a6 6 0 1 0 8 8z" stroke="#A0C0FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+  } else {
+    icon.innerHTML = `<circle cx="8" cy="8" r="3" stroke="#FFD060" stroke-width="1.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41" stroke="#FFD060" stroke-width="1.5" stroke-linecap="round"/>`;
+  }
+}
+
+/* sync mob icon on page load */
+(function() {
+  const t = localStorage.getItem('wb-theme') || 'light';
+  const icon = document.getElementById('mobThemeIcon');
+  if (t === 'dark') {
+    icon.innerHTML = `<path d="M13.5 10.5A6 6 0 0 1 5.5 2.5a6 6 0 1 0 8 8z" stroke="#A0C0FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+  }
+})();
+
+/* close drawer when nav category is clicked on mobile */
+const _origShowCategory = showCategory;
+window.showCategory = function(ci) {
+  _origShowCategory(ci);
+  if (isMobile()) closeMobMenu();
+};
+
+/* swipe to close sidebar on mobile */
+(function() {
+  let startX = 0;
+  document.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - startX;
+    if (dx < -60 && document.getElementById('sidebar').classList.contains('mob-open')) {
+      closeMobMenu();
+    }
+  }, { passive: true });
+})();
+
+/* ── INIT ─────────────────────────────────────────────── */
+buildNav('');
+showHome();
+</script>
+<div style="position:fixed;bottom:10px;right:14px;font-family:'DM Mono',monospace;font-size:10px;color:rgba(150,100,200,0.25);letter-spacing:0.5px;pointer-events:none;z-index:999;user-select:none;">v11</div>
+</body>
+</html>
