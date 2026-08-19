@@ -2289,8 +2289,52 @@ html.auth-loading .mobile-header{
 }
 </style>
 
+
+<style>
+/* archive notice before auth */
+#archive-notice{
+  position:fixed;inset:0;z-index:12000;display:flex;align-items:center;justify-content:center;
+  padding:20px;background:radial-gradient(circle 520px at 20% 15%,rgba(203,17,171,.24),transparent 70%),
+  radial-gradient(circle 520px at 85% 80%,rgba(123,53,200,.22),transparent 72%),rgba(18,0,40,.72);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  transition:opacity .45s ease,visibility .45s ease;
+}
+#archive-notice.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.archive-card{width:min(520px,100%);position:relative;overflow:hidden;border-radius:26px;padding:34px 32px 30px;color:#fff;
+  background:linear-gradient(145deg,rgba(42,5,83,.94),rgba(20,0,48,.96));border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 30px 90px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.08)}
+.archive-kicker{font:500 10px 'DM Mono',monospace;letter-spacing:1.6px;text-transform:uppercase;color:rgba(255,255,255,.52);margin-bottom:14px}
+.archive-title{margin:0 0 14px;font-size:clamp(25px,5vw,34px);line-height:1.08;letter-spacing:-1px}
+.archive-title span{background:linear-gradient(90deg,#ff7ae8,#b35cff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.archive-text{color:rgba(255,255,255,.74);font-size:14px;line-height:1.72}
+.archive-thanks{margin-top:20px;padding:16px 18px;border-radius:16px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.82);font-size:13px;line-height:1.65}
+.archive-easter{display:block;margin-top:10px;font:400 10px 'DM Mono',monospace;color:rgba(255,122,232,.55)}
+.archive-actions{margin-top:22px}
+#archive-continue{width:100%;border:0;border-radius:14px;padding:13px 18px;cursor:pointer;color:#fff;font:700 14px 'Manrope',sans-serif;background:linear-gradient(90deg,#7b35c8,#cb11ab)}
+
+/* post-auth welcome notice */
+.home-archive-note{
+  margin-top:20px;padding:18px 20px;border-radius:18px;position:relative;z-index:2;
+  background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.14);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)
+}
+.home-archive-title{font-size:14px;font-weight:800;color:#fff;margin-bottom:7px}
+.home-archive-text{font-size:12.5px;line-height:1.65;color:rgba(255,255,255,.72)}
+.home-archive-thanks{margin-top:10px;font-size:12px;line-height:1.55;color:rgba(255,255,255,.56)}
+
+@media(max-width:520px){
+  #archive-notice{align-items:flex-end;padding:14px}
+  .archive-card{border-radius:24px;padding:28px 22px 24px}
+  .archive-title{font-size:28px}
+}
+</style>
+
 </head>
 <body>
+
+
+
+
 
 <div id="archive-notice" role="dialog" aria-modal="true" aria-labelledby="archive-title">
   <div class="archive-card">
@@ -2301,18 +2345,16 @@ html.auth-loading .mobile-header{
       поэтому информация в нём со временем может перестать соответствовать текущим процессам.
     </p>
     <div class="archive-thanks">
-      <strong>И немного от себя.</strong><br>
-      Спасибо всем, кто пользовался этим справочником в работе, отправлял замечания,
-      находил неточности и помогал делать его полезнее. Надеюсь, хотя бы иногда он действительно
-      экономил вам время и помогал быстрее находить нужную тему.
-      <span class="archive-easter">для тех, кто был здесь — спасибо 💜</span>
+      <strong>Спасибо всем, кто пользовался справочником 💜</strong><br>
+      Спасибо за обратную связь, замечания, найденные неточности и за то, что помогали делать его полезнее.
+      Надеюсь, он хотя бы иногда экономил вам время и помогал быстрее находить нужную тему.
+      <span class="archive-easter">Если ты это читаешь — значит, был частью этой маленькой истории.</span>
     </div>
     <div class="archive-actions">
-      <button id="archive-continue" type="button">Перейти к справочнику</button>
+      <button id="archive-continue" type="button">Перейти к авторизации</button>
     </div>
   </div>
 </div>
-
 
 <!-- ═══ PASSWORD OVERLAY ═══ -->
 <div id="pw-overlay">
@@ -2673,10 +2715,18 @@ function showHome() {
         <div class="home-tag">WB · Внутренний справочник</div>
         <h1 class="home-h1">Справочник<br>тем <span>обращений</span></h1>
         <p class="home-sub">Единый источник актуальных тем и категорий для классификации обращений продавцов в службу поддержки.</p>
+
         <div class="home-archive-note">
-          <strong>Обновление справочника прекращено.</strong>
-          Информация сохранена для справочных целей, но со временем может перестать соответствовать актуальным процессам. В дальнейшем справочник будет отключён.
+          <div class="home-archive-title">Справочник больше не обновляется</div>
+          <div class="home-archive-text">
+            Актуализация тематик остановлена. В дальнейшем справочник будет отключён, поэтому информация в нём со временем может перестать соответствовать текущим процессам.
+          </div>
+          <div class="home-archive-thanks">
+            Спасибо всем, кто пользовался справочником, присылал замечания и помогал делать его полезнее 💜
+          </div>
         </div>
+
+        
         <div class="home-stats">
           <div class="stat-pill">
             <span class="stat-pill-num">${DATA.length}</span>
@@ -2940,15 +2990,20 @@ document.addEventListener('pointermove', function(e){
 <div id="versionBadge">v14</div>
 
 
+
+
+
 <script>
 (function(){
-  const notice=document.getElementById('archive-notice');
-  const btn=document.getElementById('archive-continue');
-  if(!notice||!btn)return;
-  btn.addEventListener('click',function(){
+  const notice = document.getElementById('archive-notice');
+  const button = document.getElementById('archive-continue');
+  if (!notice || !button) return;
+  button.addEventListener('click', function(){
     notice.classList.add('hidden');
     setTimeout(function(){
       notice.style.display='none';
+      const authOverlay=document.getElementById('pw-overlay');
+      if(authOverlay) authOverlay.style.display='flex';
       const input=document.getElementById('pw-input');
       if(input) input.focus();
     },460);
