@@ -2267,6 +2267,28 @@ html.auth-loading .mobile-header{
   .archive-text{font-size:13px}
 }
 </style>
+
+<style>
+.home-archive-note{
+  margin-top:18px;
+  position:relative;
+  z-index:2;
+  padding:14px 16px;
+  border-radius:14px;
+  background:rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.14);
+  color:rgba(255,255,255,.78);
+  font-size:12.5px;
+  line-height:1.6;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+}
+.home-archive-note strong{
+  color:#fff;
+  font-weight:700;
+}
+</style>
+
 </head>
 <body>
 
@@ -2651,6 +2673,10 @@ function showHome() {
         <div class="home-tag">WB · Внутренний справочник</div>
         <h1 class="home-h1">Справочник<br>тем <span>обращений</span></h1>
         <p class="home-sub">Единый источник актуальных тем и категорий для классификации обращений продавцов в службу поддержки.</p>
+        <div class="home-archive-note">
+          <strong>Обновление справочника прекращено.</strong>
+          Информация сохранена для справочных целей, но со временем может перестать соответствовать актуальным процессам. В дальнейшем справочник будет отключён.
+        </div>
         <div class="home-stats">
           <div class="stat-pill">
             <span class="stat-pill-num">${DATA.length}</span>
