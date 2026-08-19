@@ -2329,6 +2329,15 @@ html.auth-loading .mobile-header{
 }
 </style>
 
+
+<style>
+#archive-notice.hidden{
+  opacity:0 !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+}
+</style>
+
 </head>
 <body>
 
@@ -2997,16 +3006,39 @@ document.addEventListener('pointermove', function(e){
 (function(){
   const notice = document.getElementById('archive-notice');
   const button = document.getElementById('archive-continue');
+  const seenKey = 'wb-archive-notice-seen-v14';
+
   if (!notice || !button) return;
-  button.addEventListener('click', function(){
+
+  function removeNoticeImmediately(){
     notice.classList.add('hidden');
+    notice.style.display = 'none';
+    notice.setAttribute('aria-hidden', 'true');
+    notice.style.pointerEvents = 'none';
+  }
+
+  // После первого подтверждения больше не показываем popup при перезагрузках.
+  if (localStorage.getItem(seenKey) === '1') {
+    removeNoticeImmediately();
+    return;
+  }
+
+  button.addEventListener('click', function(){
+    localStorage.setItem(seenKey, '1');
+
+    notice.classList.add('hidden');
+    notice.style.pointerEvents = 'none';
+
     setTimeout(function(){
-      notice.style.display='none';
-      const authOverlay=document.getElementById('pw-overlay');
-      if(authOverlay) authOverlay.style.display='flex';
-      const input=document.getElementById('pw-input');
-      if(input) input.focus();
-    },460);
+      notice.style.display = 'none';
+      notice.setAttribute('aria-hidden', 'true');
+
+      const authOverlay = document.getElementById('pw-overlay');
+      if (authOverlay) authOverlay.style.display = 'flex';
+
+      const input = document.getElementById('pw-input');
+      if (input) input.focus();
+    }, 460);
   });
 })();
 </script>
