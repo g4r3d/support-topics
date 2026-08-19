@@ -2214,8 +2214,83 @@ html.auth-loading .mobile-header{
 }
 </style>
 
+<style>
+#archive-notice{
+  position:fixed;inset:0;z-index:12000;display:flex;align-items:center;justify-content:center;
+  padding:20px;background:radial-gradient(circle 520px at 20% 15%,rgba(203,17,171,.24),transparent 70%),
+  radial-gradient(circle 520px at 85% 80%,rgba(123,53,200,.22),transparent 72%),rgba(18,0,40,.72);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  transition:opacity .45s ease,visibility .45s ease;
+}
+#archive-notice.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.archive-card{
+  width:min(520px,100%);position:relative;overflow:hidden;border-radius:26px;padding:34px 32px 30px;color:#fff;
+  background:linear-gradient(145deg,rgba(42,5,83,.92),rgba(20,0,48,.94));
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 30px 90px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.08);
+  animation:archiveCardIn .65s cubic-bezier(.16,1,.3,1) both;
+}
+.archive-card::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(circle 260px at 10% 0%,rgba(255,43,214,.20),transparent 72%),
+  radial-gradient(circle 260px at 100% 100%,rgba(143,77,255,.22),transparent 72%);
+  pointer-events:none
+}
+.archive-kicker,.archive-title,.archive-text,.archive-thanks,.archive-actions{position:relative;z-index:1}
+.archive-kicker{
+  display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;font-family:'DM Mono',monospace;
+  font-size:10px;font-weight:500;letter-spacing:1.6px;text-transform:uppercase;color:rgba(255,255,255,.52)
+}
+.archive-kicker::before{content:"";width:22px;height:2px;border-radius:999px;background:linear-gradient(90deg,#8f4dff,#cb11ab)}
+.archive-title{margin:0 0 14px;font-size:clamp(25px,5vw,34px);line-height:1.08;letter-spacing:-1px;font-weight:800}
+.archive-title span{background:linear-gradient(90deg,#ff7ae8,#b35cff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.archive-text{margin:0;color:rgba(255,255,255,.72);font-size:14px;line-height:1.72}
+.archive-thanks{
+  margin-top:20px;padding:16px 18px;border-radius:16px;background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.80);font-size:13px;line-height:1.65
+}
+.archive-thanks strong{color:#fff;font-weight:700}
+.archive-easter{display:block;margin-top:10px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.5px;color:rgba(255,122,232,.52)}
+.archive-actions{margin-top:22px}
+#archive-continue{
+  width:100%;border:0;border-radius:14px;padding:13px 18px;cursor:pointer;color:#fff;
+  font-family:'Manrope',sans-serif;font-size:14px;font-weight:700;background:linear-gradient(90deg,#7b35c8,#cb11ab);
+  box-shadow:0 12px 28px rgba(123,53,200,.24);transition:transform .2s ease,box-shadow .2s ease,opacity .2s ease
+}
+#archive-continue:hover{transform:translateY(-1px);box-shadow:0 16px 34px rgba(123,53,200,.30)}
+#archive-continue:active{transform:translateY(0)}
+@keyframes archiveCardIn{from{opacity:0;transform:translateY(16px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:520px){
+  #archive-notice{align-items:flex-end;padding:14px}
+  .archive-card{border-radius:24px;padding:28px 22px 24px}
+  .archive-title{font-size:28px}
+  .archive-text{font-size:13px}
+}
+</style>
 </head>
 <body>
+
+<div id="archive-notice" role="dialog" aria-modal="true" aria-labelledby="archive-title">
+  <div class="archive-card">
+    <div class="archive-kicker">Небольшое объявление</div>
+    <h2 class="archive-title" id="archive-title">Справочник больше <span>не обновляется</span></h2>
+    <p class="archive-text">
+      Актуализация тематик остановлена. В дальнейшем этот справочник будет отключён,
+      поэтому информация в нём со временем может перестать соответствовать текущим процессам.
+    </p>
+    <div class="archive-thanks">
+      <strong>И немного от себя.</strong><br>
+      Спасибо всем, кто пользовался этим справочником в работе, отправлял замечания,
+      находил неточности и помогал делать его полезнее. Надеюсь, хотя бы иногда он действительно
+      экономил вам время и помогал быстрее находить нужную тему.
+      <span class="archive-easter">для тех, кто был здесь — спасибо 💜</span>
+    </div>
+    <div class="archive-actions">
+      <button id="archive-continue" type="button">Перейти к справочнику</button>
+    </div>
+  </div>
+</div>
+
 
 <!-- ═══ PASSWORD OVERLAY ═══ -->
 <div id="pw-overlay">
@@ -2836,7 +2911,24 @@ document.addEventListener('pointermove', function(e){
 </script>
 
 
-<div id="versionBadge">v13</div>
+<div id="versionBadge">v14</div>
+
+
+<script>
+(function(){
+  const notice=document.getElementById('archive-notice');
+  const btn=document.getElementById('archive-continue');
+  if(!notice||!btn)return;
+  btn.addEventListener('click',function(){
+    notice.classList.add('hidden');
+    setTimeout(function(){
+      notice.style.display='none';
+      const input=document.getElementById('pw-input');
+      if(input) input.focus();
+    },460);
+  });
+})();
+</script>
 
 </body>
 </html>
